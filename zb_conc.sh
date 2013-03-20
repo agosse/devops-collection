@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Defaults
-
 # The length of time the test runs for.
 RUNTIME=30
 
@@ -21,23 +19,40 @@ BUSY_CONC=1000
 SSH_USER='root'
 SSH_HOST='testbox'
 
-PARAMS=`getopt -o r:,i:,l:,b:,u:,h:,s: \
+function usage {
+echo ""
+echo "zb_conc.sh"
+echo ""
+echo "Usage: zb_conc.sh [options]"
+echo ""
+echo "Options:"
+echo ""
+echo "  --runtime=,-r       Length of time to run for."
+echo "  --idle-conc=,-i     Number of concurrent idle connections."
+echo "  --idle-linger=,-l   Length of time between idle GETs."
+echo "  --busy-conc=,-b     Number of concurrent busy connections."
+echo "  --ssh-user=,-u      SSH user name."
+echo "  --ssh-host=,-h      SSH host \(where you want to run zeusbench\)."
+echo "  --sut-url=,-s       The URL of the system under test."
+}
+
+params=`getopt -o r:,i:,l:,b:,u:,h:,s: \
 -l runtime:,idle-conc:,idle-linger:,busy-conc:,ssh-user:,ssh-host:,sut-url: \
 -- "$@"`
 
-eval set -- "${PARAMS}"
+eval set -- "${params}"
 while true; do
-	case "$1" in
-		--runtime ) RUNTIME="$2"; shift 2 ;;
-		--idle-conc ) IDLE_CONC="$2"; shift 2 ;;
-		--idle-linger ) IDLE_LINGER="$2"; shift 2 ;;
-		--busy-conc ) BUSY_CONC="$2"; shift 2 ;;
-		--ssh-user ) SSH_USER="$2"; shift 2 ;;
-		--ssh-host ) SSH_HOST="$2"; shift 2 ;;
-		--sut-url ) ="$2"; shift 2 ;;
-		-- ) shift; break ;;
-		* ) break ;;
-	esac
+    case "$1" in
+        --runtime ) RUNTIME="$2"; shift 2 ;;
+        --idle-conc ) IDLE_CONC="$2"; shift 2 ;;
+        --idle-linger ) IDLE_LINGER="$2"; shift 2 ;;
+        --busy-conc ) BUSY_CONC="$2"; shift 2 ;;
+        --ssh-user ) SSH_USER="$2"; shift 2 ;;
+        --ssh-host ) SSH_HOST="$2"; shift 2 ;;
+        --sut-url ) ="$2"; shift 2 ;;
+        -- ) shift; break ;;
+        * ) break ;;
+    esac
 done
 
 SSH_CMD="/usr/bin/ssh -l ${SSH_USER} ${SSH_HOST}"
