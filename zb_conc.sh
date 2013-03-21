@@ -74,9 +74,6 @@ while true; do
     esac
 done
 
-echo "Runtime: ${RUNTIME}"
-echo "Hosts: ${SSH_HOSTS[@]}"
-
 if [ ${#SSH_HOSTS[@]} -eq 0 ]; then
 	echo ""
 	echo "ERROR: No client machines specified.  See --ssh-host."
